@@ -1,0 +1,44 @@
+version: "3.4"
+
+networks:
+  iot:
+    driver: overlay
+    attachable: true
+
+configs:
+  consul-config.json:
+    file: ./consul-config.json
+
+services:
+  consul:
+    image: consul:1.6.3
+    configs:
+      - source: consul-config.json 
+        target: /etc/consul/consul-config.json
+    command: agent -config-file /etc/consul/consul-config.json 
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+      - CONSUL_CLIENT_INTERFACE=eth0
+      #- CONSUL_HTTP_TOKEN=
+    ports:
+      - target: 8500
+        published: 8500
+        protocol: tcp
+        mode: host
+    networks:
+      - iot
+    volumes:
+      - ./data/consul:/consul/data
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 15s
+        failure_action: rollback
+        order: stop-first
+        monitor: 25000ms
+      restart_policy:
+        condition: on-failure
+        max_attempts: 20
+

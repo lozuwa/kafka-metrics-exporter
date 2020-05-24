@@ -1,0 +1,21 @@
+{
+  "datacenter": "mojix",
+  "data_dir": "/opt/consul",
+  "log_level": "INFO",
+  "node_name": "consul-001",
+  "server": true,
+  "bootstrap": true,
+  "ui": true,
+  "addresses": {
+    "http": "0.0.0.0"
+  },
+  "ports": {
+    "http": 8500
+  },
+  "acl": {
+    "enabled": false,
+    "default_policy": "deny",
+    "enable_token_persistence": true,
+    "enable_key_list_policy": true
+  }
+}

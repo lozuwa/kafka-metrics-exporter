@@ -1,0 +1,66 @@
+version: "3.4"
+
+networks:
+  iot:
+    driver: overlay
+    attachable: true
+
+services:
+  zookeeper:
+    image: zookeeper:3.4.12
+    ports:
+      - target: 2181 
+        published: 2181 
+        protocol: tcp
+        mode: host
+    networks:
+      - iot
+    volumes:
+      - ./data/zookeeper:/data/zookeeper/
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 15s
+        failure_action: rollback
+        order: stop-first
+        monitor: 25000ms
+      restart_policy:
+        condition: on-failure
+        max_attempts: 20
+
+  kafka:
+    image: mojix/kafka:v2.2.1
+    environment:
+      KAFKA_MAX_MEMORY: "2g"
+      KAFKA_MIN_MEMORY: "2g"
+      KAFKA_PARAM_BROKER_ID: "1"
+      KAFKA_PARAM_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_PARAM_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.0.7:9092"
+      KAFKA_PARAM_OFFSETS_RETENTION_MINUTES: "10080"
+      KAFKA_PARAM_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_PARAM_LOG_RETENTION_HOURS: "12"
+      KAFKA_PARAM_LOG_RETENTION_BYTES: "1073741824"
+    ports:
+      - target: 9092 
+        published: 9092 
+        protocol: tcp
+        mode: host
+    networks:
+      - iot
+    volumes:
+      - ./data/kafka:/data/
+    deploy:
+      endpoint_mode: dnsrr
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 15s
+        failure_action: rollback
+        order: stop-first
+        monitor: 25000ms
+      restart_policy:
+        condition: on-failure
+        max_attempts: 20
+
