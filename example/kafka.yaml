@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 networks:
   iot:
@@ -31,17 +31,16 @@ services:
         max_attempts: 20
 
   kafka:
-    image: mojix/kafka:v2.2.1
+    image: lozuwa/kafka:v2.5.0
     environment:
-      KAFKA_MAX_MEMORY: "2g"
-      KAFKA_MIN_MEMORY: "2g"
-      KAFKA_PARAM_BROKER_ID: "1"
-      KAFKA_PARAM_AUTO_CREATE_TOPICS_ENABLE: "false"
-      KAFKA_PARAM_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.0.7:9092"
-      KAFKA_PARAM_OFFSETS_RETENTION_MINUTES: "10080"
-      KAFKA_PARAM_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_PARAM_LOG_RETENTION_HOURS: "12"
-      KAFKA_PARAM_LOG_RETENTION_BYTES: "1073741824"
+      KAFKA_HEAP_OPTS: "-Xmx2G -Xms2G"
+      KAFKA_BROKER_ID: "1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://192.168.0.2:9092"
+      KAFKA_OFFSETS_RETENTION_MINUTES: "10080"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LOG_RETENTION_HOURS: "768"
+      KAFKA_LOG_RETENTION_BYTES: "1073741824"
     ports:
       - target: 9092 
         published: 9092 

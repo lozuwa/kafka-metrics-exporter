@@ -1,4 +1,4 @@
-package com.lozuwa.kafkametricsexporter.metricsexporter;
+package com.lozuwa.kafkametricsexporter.metricsgenerator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
