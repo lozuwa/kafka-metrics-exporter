@@ -1,5 +1,6 @@
 # TODO
-* Add prometheus client rather than building the response by yourself.
+* Consumer groups must have in its POJO Map<Topic, List<Partitons>>
+* Partitions must have partitionId, currentOffset, endOffset 
 
 # Kafka-metrics-exporter
 ## Description
@@ -20,4 +21,6 @@ Configuration variables are listed below.
 * kafka.bootstrapAddress
 * kafka.consumer.groupId
 
+### References
+* https://gquintana.github.io/2020/01/16/Retrieving-Kafka-lag.html
 

@@ -2,6 +2,7 @@ package com.lozuwa.kafkametricsexporter.kafka.service;
 
 import com.lozuwa.kafkametricsexporter.Utils.Utils;
 import com.lozuwa.kafkametricsexporter.kafka.Model.KafkaTopic;
+import com.lozuwa.kafkametricsexporter.kafka.Model.KafkaTopicPartition;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.ConfigEntry;
@@ -44,13 +45,30 @@ public class KafkaTopicServiceImp implements KafkaTopicService {
     // Load topics to the KafkaTopic POJO.
     for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
       // Extract kafka topic fields.
+      // Topic name.
       String topicName = topic.getKey();
-      int partitions = topic.getValue().size();
-      short replicationFactor = (short) topic.getValue().get(0).replicas().length;
+      // Partitions.
+      List<KafkaTopicPartition> partitions = new ArrayList<>();
+      KafkaTopicPartition kafkaTopicPartition = new KafkaTopicPartition();
+      topic.getValue();
+      for (PartitionInfo partitionInfo : topic.getValue()){
+        int partitionId = partitionInfo.partition();
+        int leaderId = partitionInfo.leader().id();
+        int replicationFactor = partitionInfo.replicas().length;
+        int inSyncReplicas = partitionInfo.inSyncReplicas().length;
+        int offlineReplicas = partitionInfo.offlineReplicas().length;
+        kafkaTopicPartition.setPartitionId(partitionId);
+        kafkaTopicPartition.setLeaderId(leaderId);
+        kafkaTopicPartition.setReplicationFactor(replicationFactor);
+        kafkaTopicPartition.setInSyncReplicas(inSyncReplicas);
+        kafkaTopicPartition.setOfflineReplicas(offlineReplicas);
+        partitions.add(kafkaTopicPartition);
+      }
+      logger.info(Utils.StringFormatter("Topic name: {0}, Topic stuff: {1}", topicName, topic.getValue().toString()));
       HashMap<String, String> topicConfigurations = getTopicConfig(admin, topicName);
-      logger.finest(Utils.StringFormatter("Topic: {0} partitions: {1} replication-factor: {2}", topicName, partitions, replicationFactor));
       // Load POJO.
-      KafkaTopic kafkaTopic = new KafkaTopic(topicName, partitions, replicationFactor, topicConfigurations);
+      //KafkaTopic kafkaTopic = new KafkaTopic(topicName, partitions, replicationFactor, topicConfigurations);
+      KafkaTopic kafkaTopic = new KafkaTopic(topicName, partitions, topicConfigurations);
       kafkaTopics.add(kafkaTopic);
     }
     // Return list of POJOs.

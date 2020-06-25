@@ -18,16 +18,26 @@ public class KafkaServiceImp implements KafkaService {
   private KafkaAdminService kafkaAdminService;
 
   @Autowired
+  private KafkaClusterService kafkaClusterService;
+
+  @Autowired
   private KafkaTopicService kafkaTopicService;
 
   @Autowired
   private KafkaConsumerGroupService kafkaConsumerGroupService;
 
   @Autowired
-  public KafkaServiceImp(KafkaAdminService kafkaAdminService, KafkaTopicService kafkaTopicService, KafkaConsumerGroupService kafkaConsumerGroupService){
+  public KafkaServiceImp(KafkaAdminService kafkaAdminService, KafkaTopicService kafkaTopicService, KafkaConsumerGroupService kafkaConsumerGroupService, KafkaClusterService kafkaClusterService){
     this.kafkaAdminService = kafkaAdminService;
     this.kafkaTopicService = kafkaTopicService;
     this.kafkaConsumerGroupService = kafkaConsumerGroupService;
+    this.kafkaClusterService = kafkaClusterService;
+  }
+
+  @Override
+  public int getKafkaBrokers(){
+    int kafkaBrokers = kafkaClusterService.getKafkaBrokers();
+    return kafkaBrokers;
   }
 
   @Override

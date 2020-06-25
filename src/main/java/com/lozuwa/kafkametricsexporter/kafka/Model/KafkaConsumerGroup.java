@@ -1,11 +1,14 @@
 package com.lozuwa.kafkametricsexporter.kafka.Model;
 
+import java.util.List;
+
 public class KafkaConsumerGroup {
 
   private String id;
   private String state;
   private String coordinator;
   private String partitionAssignor;
+  private List<KafkaTopicPartition> partitions;
 
   public KafkaConsumerGroup(String id, String state, String coordinator, String partitionAssignor) {
     this.id = id;
@@ -46,14 +49,11 @@ public class KafkaConsumerGroup {
     this.partitionAssignor = partitionAssignor;
   }
 
-  @Override
-  public String toString() {
-    return "KafkaConsumerGroup{" +
-        "id='" + id + '\'' +
-        ", state='" + state + '\'' +
-        ", coordinator='" + coordinator + '\'' +
-        ", partitionAssignor='" + partitionAssignor + '\'' +
-        '}';
+  public List<KafkaTopicPartition> getPartitions() {
+    return partitions;
   }
 
+  public void setPartitions(List<KafkaTopicPartition> partitions) {
+    this.partitions = partitions;
+  }
 }

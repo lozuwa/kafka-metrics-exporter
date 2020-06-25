@@ -1,18 +1,17 @@
 package com.lozuwa.kafkametricsexporter.kafka.Model;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class KafkaTopic {
 
   private String topicName;
-  private int partitions;
-  private short replicationFactor;
+  private List<KafkaTopicPartition> partitions;
   private HashMap<String, String> topicConfigurations;
 
-  public KafkaTopic(String topicName, int partitions, short replicationFactor, HashMap<String, String> topicConfigurations) {
+  public KafkaTopic(String topicName, List<KafkaTopicPartition> partitions, HashMap<String, String> topicConfigurations) {
     this.topicName = topicName;
     this.partitions = partitions;
-    this.replicationFactor = replicationFactor;
     this.topicConfigurations = topicConfigurations;
   }
 
@@ -24,20 +23,12 @@ public class KafkaTopic {
     this.topicName = topicName;
   }
 
-  public int getPartitions() {
+  public List<KafkaTopicPartition> getPartitions() {
     return partitions;
   }
 
-  public void setPartitions(int partitions) {
+  public void setPartitions(List<KafkaTopicPartition> partitions) {
     this.partitions = partitions;
-  }
-
-  public short getReplicationFactor() {
-    return replicationFactor;
-  }
-
-  public void setReplicationFactor(short replicationFactor) {
-    this.replicationFactor = replicationFactor;
   }
 
   public HashMap<String, String> getTopicConfigurations() {
@@ -46,15 +37,5 @@ public class KafkaTopic {
 
   public void setTopicConfigurations(HashMap<String, String> topicConfigurations) {
     this.topicConfigurations = topicConfigurations;
-  }
-
-  @Override
-  public String toString() {
-    return "KafkaTopic{" +
-        "topicName='" + topicName + '\'' +
-        ", partitions=" + partitions +
-        ", replicationFactor=" + replicationFactor +
-        ", topicConfigurations=" + topicConfigurations +
-        '}';
   }
 }

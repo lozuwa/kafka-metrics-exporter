@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface KafkaService {
 
+  public int getKafkaBrokers();
+
   public List<KafkaTopic> loadKafkaTopicsToCollection();
 
   public List<KafkaConsumerGroup> loadKafkaConsumerGroupsToCollection();

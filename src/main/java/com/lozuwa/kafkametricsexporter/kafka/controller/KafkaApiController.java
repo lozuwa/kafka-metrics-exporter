@@ -25,41 +25,6 @@ public class KafkaApiController {
   @Autowired
   KafkaService kafkaService;
 
-  @Autowired
-  MeterRegistry meterRegistry;
-
-  public KafkaApiController(MeterRegistry meterRegistry){
-    // Counter.
-    final Counter myCounter = meterRegistry.counter("my.counter", "keycounter", "valuecounter");
-    // Gauge.
-    Iterable<Tag> iterable = Tags.of("keygauge", "valuegauge");
-    final AtomicInteger myGauge = meterRegistry.gauge("my.gauge", iterable, new AtomicInteger(0));
-  }
-
-  @RequestMapping(value="/test", method=RequestMethod.GET)
-  public ResponseEntity<String> test(){
-    // Generate a random string for the tags.
-    String[] abc = {"a", "b", "c"};
-    Random rand = new Random();
-    StringBuilder randomValue = new StringBuilder();
-    for (int index=0; index<=1; index++){
-      int randIndex = rand.nextInt(abc.length-1);
-      randomValue.append(abc[randIndex]);
-    }
-
-    // Update already declared counter. Add tag value and counter.
-    Counter counter = Metrics.counter("my.counter",  "keycounter", randomValue.toString());
-    counter.increment();
-
-    // Update already declared gauge. Add tag value and set quantity.
-    Iterable<Tag> iterable = Tags.of("keygauge", randomValue.toString());
-    AtomicInteger gauge = Metrics.gauge("my.gauge", iterable, new AtomicInteger(0));
-    int randNumber = rand.nextInt(abc.length-1);
-    gauge.set(randNumber);
-
-    return new ResponseEntity<>("TEST", HttpStatus.OK);
-  }
-
   @RequestMapping(value="/topics", method=RequestMethod.GET)
   public ResponseEntity<List<KafkaTopic>> getTopics(){
     // Get topics from kafka.

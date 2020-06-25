@@ -27,6 +27,11 @@ public class KafkaAdminServiceImp implements KafkaAdminService {
     return adminClient;
   }
 
+  @Override
+  public void closeAdminClient(AdminClient adminClient){
+    adminClient.close();
+  }
+
   public Properties loadBootstrapConfigs(){
     Properties configs = new Properties();
     configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
